@@ -1,52 +1,41 @@
-import { initializeTracing } from './lib/opentelemetry.js'
+import { initializeTracing } from './config/opentelemetry'
 initializeTracing()
 
+import dotenv from 'dotenv'
 import Fastify, { FastifyInstance } from 'fastify'
+import Routes from './routes'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+import InitDependencies from './config/init-deps'
 
-import Database from './lib/knex.js'
-import { Routes } from './routes/index.js'
-import CustomerController from './controllers/customers/index.js'
-import CustomerService from './services/customers/index.js'
-import { CustomerRepository } from './repositories/customers/index.js'
-import { Knex } from 'knex'
+dotenv.config({
+  path: '.env',
+})
 
 const server: FastifyInstance = Fastify({
   logger: true,
 }).withTypeProvider<TypeBoxTypeProvider>()
 
-server.get('/', async () => {
-  return { hello: 'world' }
+server.setErrorHandler((error, _request, reply) => {
+  server.log.error(error)
+  reply.status(500).send({ error: 'Something went wrong' })
 })
-
-const getDatabse = () => {
-  Database.setup()
-  return Database.getInstance()
-}
-
-const initDependencies = (db: Knex) => {
-  const customerRepository = new CustomerRepository(db)
-  const customerService = new CustomerService(customerRepository)
-  const customerController = new CustomerController(customerService)
-  return customerController
-}
 
 const start = async () => {
   try {
-    Database.setup()
-    const db = Database.getInstance()
-    if (process.env.NODE_ENV === 'development') {
-      await Database.seedDb()
-    }
-    initDependencies(db)
-    const routes = new Routes()
+    const config = new InitDependencies(server)
+    const db = config.initDatabse()
+
+    const { customerController } = config.initControllers(db)
+    const routes = new Routes(customerController)
+
+    routes.initRoutes(server)
 
     await server.listen({ port: 3000 })
     const address = server.server.address()
     const port = typeof address === 'object' ? address?.port : address
-    console.log(`Server listening on port ${port}`)
+    server.log.info(`Server listening on port ${port}`)
   } catch (err) {
-    server.log.error('err initializing application', err)
+    server.log.error(err.message, 'err initializing application')
     process.exit(1)
   }
 }

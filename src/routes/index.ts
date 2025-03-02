@@ -12,5 +12,13 @@ export default class Routes implements IRoutes {
     server.register(this.customerController.handler, {
       prefix: '/api/customers',
     })
+
+    server.register(
+      (server) =>
+        server.get('/', (req, reply) =>
+          reply.send({ message: 'chegou a request' }),
+        ),
+      { prefix: '/api/test' },
+    )
   }
 }

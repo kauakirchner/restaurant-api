@@ -5,6 +5,7 @@ export default class Database {
 
   public static setup() {
     if (!Database.instance) {
+      console.log('conn string: ', process.env.POSTGRES_CONNECTION_STRING)
       Database.instance = knex({
         client: 'pg',
         connection: process.env.POSTGRES_CONNECTION_STRING,
@@ -38,9 +39,9 @@ export default class Database {
       throw new Error('Database not connected')
     }
 
+    await db.schema.dropTableIfExists('orders')
     await db.schema.dropTableIfExists('customers')
     await db.schema.dropTableIfExists('dishes')
-    await db.schema.dropTableIfExists('orders')
 
     await db.schema.createTable('customers', (table) => {
       table.increments('id').primary()
@@ -62,15 +63,19 @@ export default class Database {
       table.integer('number')
       table.timestamp('created_at').defaultTo(db.fn.now())
       table.string('note')
+      table.integer('customer_id').unsigned().notNullable()
+      table.integer('dish_id').unsigned().notNullable()
 
       table
         .foreign('customer_id')
-        .references('customers.id')
+        .references('id')
+        .inTable('customers')
         .withKeyName('fk_fkey_customers')
 
       table
         .foreign('dish_id')
-        .references('dishes.id')
+        .references('id')
+        .inTable('dishes')
         .withKeyName('fk_fkey_dishes')
     })
 

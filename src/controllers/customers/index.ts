@@ -1,40 +1,66 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { ICustomerService } from '../../services/customers'
 import Customer from '../../entities/customer'
 
 export interface ICustomerController {
-  get(): Promise<Customer[]>
-  getById(id: number): Promise<Customer>
-  create(customer: Customer): Promise<Customer>
+  get(request: FastifyRequest, reply: FastifyReply): Promise<void>
+  getById(request: FastifyRequest, reply: FastifyReply): Promise<void>
+  create(request: FastifyRequest, reply: FastifyReply): Promise<void>
   handler(server: FastifyInstance): Promise<void>
 }
 
 export default class CustomerController implements ICustomerController {
-  constructor(private readonly customerService: ICustomerService) {}
+  constructor(private readonly customerService: ICustomerService) {
+    this.handler = this.handler.bind(this)
+  }
 
   public async handler(server: FastifyInstance): Promise<void> {
-    server.get('/', async () => {
-      return this.get()
-    })
+    server.log.info('Init customerController')
 
-    server.get('/:id', async (request) => {
-      return this.getById(request.params as number)
-    })
-
-    server.post('/', async (request) => {
-      return this.create(request.body as Customer)
-    })
+    server.get('/', (request, reply) => this.get(request, reply))
+    server.get<{ Params: { id: number } }>('/:id', (request, reply) =>
+      this.getById(request, reply),
+    )
+    server.post<{ Body: Customer }>('/', (request, reply) =>
+      this.create(request, reply),
+    )
   }
 
-  public async get(): Promise<Customer[]> {
-    return this.customerService.get()
+  async get(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const response: Customer[] = await this.customerService.get()
+
+      return reply.status(200).send(response)
+    } catch (error) {
+      request.log.error(`error on getCustomers: ${error.message}`)
+      reply.status(error.statusCode).send({ error })
+    }
   }
 
-  public async getById(id: number): Promise<Customer> {
-    return this.customerService.getById(id)
+  async getById(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const { id } = request.params as { id: number }
+
+      const response = await this.customerService.getById(id)
+
+      reply.status(200).send(response)
+    } catch (error: any) {
+      request.log.error(`error on getCustomerById: ${error.message}`)
+      reply
+        .status(error.statusCode ?? 500)
+        .send({ error: error ?? 'unexpected error' })
+    }
   }
 
-  public async create(customer: Customer): Promise<Customer> {
-    return this.customerService.create(customer)
+  async create(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const customer = request.body as Customer
+      const response = await this.customerService.create(customer)
+
+      return reply.status(201).send(response)
+    } catch (error) {
+      request.log.error(`error on createCustomer: ${error.message}`)
+      reply.status(error.statusCode ?? 500).send({ error })
+    }
   }
 }
