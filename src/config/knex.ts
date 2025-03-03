@@ -39,6 +39,7 @@ export default class Database {
       throw new Error('Database not connected')
     }
 
+    await db.schema.dropTableIfExists('orders_dishes')
     await db.schema.dropTableIfExists('orders')
     await db.schema.dropTableIfExists('customers')
     await db.schema.dropTableIfExists('dishes')
@@ -75,6 +76,7 @@ export default class Database {
     await db.schema.createTable('orders_dishes', (table) => {
       table.integer('order_id').unsigned().notNullable()
       table.integer('dish_id').unsigned().notNullable()
+      table.tinyint('quantity')
 
       table
         .foreign('order_id')
@@ -180,11 +182,16 @@ export default class Database {
     const dishIdList = dishIds.map((row: any) => row.id)
 
     const ordersDishes = [
-      { order_id: orderIdList[0], dish_id: dishIdList[0] },
-      { order_id: orderIdList[1], dish_id: dishIdList[1] },
-      { order_id: orderIdList[2], dish_id: dishIdList[2] },
-      { order_id: orderIdList[3], dish_id: dishIdList[3] },
-      { order_id: orderIdList[4], dish_id: dishIdList[4] },
+      { order_id: orderIdList[0], dish_id: dishIdList[0], quantity: 2 },
+      { order_id: orderIdList[0], dish_id: dishIdList[1], quantity: 4 },
+      { order_id: orderIdList[1], dish_id: dishIdList[1], quantity: 3 },
+      { order_id: orderIdList[1], dish_id: dishIdList[2], quantity: 6 },
+      { order_id: orderIdList[2], dish_id: dishIdList[2], quantity: 7 },
+      { order_id: orderIdList[2], dish_id: dishIdList[0], quantity: 1 },
+      { order_id: orderIdList[3], dish_id: dishIdList[3], quantity: 8 },
+      { order_id: orderIdList[3], dish_id: dishIdList[1], quantity: 10 },
+      { order_id: orderIdList[4], dish_id: dishIdList[4], quantity: 25 },
+      { order_id: orderIdList[4], dish_id: dishIdList[0], quantity: 3 },
     ]
 
     await db('orders_dishes').insert(ordersDishes)
