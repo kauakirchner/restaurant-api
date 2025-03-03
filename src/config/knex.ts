@@ -64,13 +64,23 @@ export default class Database {
       table.timestamp('created_at').defaultTo(db.fn.now())
       table.string('note')
       table.integer('customer_id').unsigned().notNullable()
-      table.integer('dish_id').unsigned().notNullable()
 
       table
         .foreign('customer_id')
         .references('id')
         .inTable('customers')
         .withKeyName('fk_fkey_customers')
+    })
+
+    await db.schema.createTable('orders_dishes', (table) => {
+      table.integer('order_id').unsigned().notNullable()
+      table.integer('dish_id').unsigned().notNullable()
+
+      table
+        .foreign('order_id')
+        .references('id')
+        .inTable('orders')
+        .withKeyName('fk_fkey_orders')
 
       table
         .foreign('dish_id')
@@ -136,42 +146,48 @@ export default class Database {
     ]
 
     const dishIds = await db('dishes').insert(dishes, ['id'])
-    const dishIdList = dishIds.map((row: any) => row.id)
 
     const orders = [
       {
         number: 1,
         note: 'Extra cheese',
         customer_id: customerIdList[0],
-        dish_id: dishIdList[0],
       },
       {
         number: 2,
         note: 'No onions',
         customer_id: customerIdList[1],
-        dish_id: dishIdList[1],
       },
       {
         number: 3,
         note: 'Well done',
         customer_id: customerIdList[2],
-        dish_id: dishIdList[2],
       },
       {
         number: 4,
         note: 'Gluten-free',
         customer_id: customerIdList[3],
-        dish_id: dishIdList[3],
       },
       {
         number: 5,
         note: 'Spicy',
         customer_id: customerIdList[4],
-        dish_id: dishIdList[4],
       },
     ]
 
-    await db('orders').insert(orders)
+    const ordersIds = await db('orders').insert(orders, ['id'])
+    const orderIdList = ordersIds.map((row) => row.id)
+    const dishIdList = dishIds.map((row: any) => row.id)
+
+    const ordersDishes = [
+      { order_id: orderIdList[0], dish_id: dishIdList[0] },
+      { order_id: orderIdList[1], dish_id: dishIdList[1] },
+      { order_id: orderIdList[2], dish_id: dishIdList[2] },
+      { order_id: orderIdList[3], dish_id: dishIdList[3] },
+      { order_id: orderIdList[4], dish_id: dishIdList[4] },
+    ]
+
+    await db('orders_dishes').insert(ordersDishes)
   }
   catch(error) {
     console.error('Error populating database:', error.message)
