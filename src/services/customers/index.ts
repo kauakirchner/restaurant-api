@@ -1,6 +1,6 @@
 import { InternalServerError } from '../../_shared/errors'
 import logger from '../../config/logger'
-import Customer from '../../entities/customer'
+import Customer from '../../types/customer'
 import { ICustomerRepository } from '../../repositories/customers'
 
 export interface ICustomerService {

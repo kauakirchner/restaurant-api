@@ -25,8 +25,8 @@ const start = async () => {
     const config = new InitDependencies(server)
     const db = config.initDatabse()
 
-    const { customerController } = config.initControllers(db)
-    const routes = new Routes(customerController)
+    const { customerController, orderController } = config.initControllers(db)
+    const routes = new Routes(customerController, orderController)
 
     routes.initRoutes(server)
 

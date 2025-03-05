@@ -1,5 +1,5 @@
 import { Knex } from 'knex'
-import Customer from '../../entities/customer'
+import Customer from '../../types/customer'
 import { NotFoundError } from '../../_shared/errors'
 import logger from '../../config/logger'
 
