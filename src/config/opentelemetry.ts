@@ -8,7 +8,7 @@ import { CompressionAlgorithm } from '@opentelemetry/otlp-exporter-base'
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 
 const sdk = new NodeSDK({
-  serviceName: 'students-api',
+  serviceName: 'restaurant-api',
   traceExporter: new OTLPTraceExporter({
     url: 'http://localhost:4317',
     compression: CompressionAlgorithm.GZIP,
