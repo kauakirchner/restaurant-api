@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import { IOrderService } from '../../services/orders'
-import Order from '../../types/order'
+import { IOrderService } from '~/services/orders'
+import Order from '~/types/order'
 
 export interface IOrderController {
   get(request: FastifyRequest, reply: FastifyReply): Promise<void>

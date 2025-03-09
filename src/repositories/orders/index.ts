@@ -1,7 +1,7 @@
 import { Knex } from 'knex'
-import Order from '../../types/order'
-import { NotFoundError } from '../../_shared/errors'
-import logger from '../../config/logger'
+import Order from '~/types/order'
+import { NotFoundError } from '~/_shared/errors'
+import logger from '~/config/logger'
 
 export interface IOrderRepository {
   get(): Promise<Order[]>

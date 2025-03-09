@@ -12,6 +12,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "~/*": ["src/*"],
       "config/*": ["config/*"]
     },
     "types": ["node", "jest"]

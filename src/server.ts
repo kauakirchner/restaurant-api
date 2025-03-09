@@ -1,12 +1,12 @@
-import { initializeTracing } from './config/opentelemetry'
+import { initializeTracing } from '~/config/opentelemetry'
 initializeTracing()
 
 import dotenv from 'dotenv'
 import Fastify, { FastifyInstance } from 'fastify'
 import Routes from './routes'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
-import InitDependencies from './config/init-deps'
-import logger from './config/logger'
+import InitDependencies from '~/config/init-deps'
+import logger from '~/config/logger'
 
 dotenv.config({
   path: '.env',

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import Dish from '../../types/dish'
-import { IDishService } from '../../services/dishes'
+import Dish from '~/types/dish'
+import { IDishService } from '~/services/dishes'
 
 export interface IDishController {
   get(request: FastifyRequest, reply: FastifyReply): Promise<void>

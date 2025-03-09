@@ -5,7 +5,6 @@ export default class Database {
 
   public static setup() {
     if (!Database.instance) {
-      console.log('conn string: ', process.env.POSTGRES_CONNECTION_STRING)
       Database.instance = knex({
         client: 'pg',
         connection: process.env.POSTGRES_CONNECTION_STRING,

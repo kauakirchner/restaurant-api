@@ -1,7 +1,7 @@
 import { Knex } from 'knex'
-import { NotFoundError } from '../../_shared/errors'
-import logger from '../../config/logger'
-import Dish from '../../types/dish'
+import { NotFoundError } from '~/_shared/errors'
+import logger from '~/config/logger'
+import Dish from '~/types/dish'
 
 export interface IDishRepository {
   get(): Promise<Dish[]>

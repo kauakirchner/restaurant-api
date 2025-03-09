@@ -1,7 +1,7 @@
-import { InternalServerError } from '../../_shared/errors'
-import logger from '../../config/logger'
-import Dish from '../../types/dish'
-import { IDishRepository } from '../../repositories/dishes'
+import { InternalServerError } from '~/_shared/errors'
+import logger from '~/config/logger'
+import Dish from '~/types/dish'
+import { IDishRepository } from '~/repositories/dishes'
 
 export interface IDishService {
   get(): Promise<Dish[]>

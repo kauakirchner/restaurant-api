@@ -1,7 +1,7 @@
 import { Knex } from 'knex'
-import Customer from '../../types/customer'
-import { NotFoundError } from '../../_shared/errors'
-import logger from '../../config/logger'
+import Customer from '~/types/customer'
+import { NotFoundError } from '~/_shared/errors'
+import logger from '~/config/logger'
 
 export interface ICustomerRepository {
   get(): Promise<Customer[]>

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
-import { ICustomerController } from '../controllers/customers'
-import { IOrderController } from '../controllers/orders'
+import { ICustomerController } from '~/controllers/customers'
+import { IOrderController } from '~/controllers/orders'
 import { IDishController } from 'src/controllers/dishes'
 
 interface IRoutes {

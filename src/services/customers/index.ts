@@ -1,7 +1,7 @@
-import { InternalServerError } from '../../_shared/errors'
-import logger from '../../config/logger'
-import Customer from '../../types/customer'
-import { ICustomerRepository } from '../../repositories/customers'
+import { InternalServerError } from '~/_shared/errors'
+import logger from '~/config/logger'
+import Customer from '~/types/customer'
+import { ICustomerRepository } from '~/repositories/customers'
 
 export interface ICustomerService {
   get(): Promise<Customer[]>

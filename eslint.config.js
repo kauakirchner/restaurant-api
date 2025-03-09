@@ -1,8 +1,15 @@
-{
+export default {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
     "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
   },
   "env": {
     "node": true
@@ -13,6 +20,7 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "no-console": "warn",
+    "no-console": "error",
+    "import/no-relative-parent-imports": "error"
   }
 }

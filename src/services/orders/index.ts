@@ -1,7 +1,7 @@
-import { InternalServerError } from '../../_shared/errors'
-import logger from '../../config/logger'
-import Order from '../../types/order'
-import { IOrderRepository } from '../../repositories/orders'
+import { InternalServerError } from '~/_shared/errors'
+import logger from '~/config/logger'
+import Order from '~/types/order'
+import { IOrderRepository } from '~/repositories/orders'
 
 export interface IOrderService {
   get(): Promise<Order[]>
