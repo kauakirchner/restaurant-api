@@ -6,6 +6,7 @@ import Fastify, { FastifyInstance } from 'fastify'
 import Routes from './routes'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import InitDependencies from './config/init-deps'
+import logger from './config/logger'
 
 dotenv.config({
   path: '.env',
@@ -16,7 +17,7 @@ const server: FastifyInstance = Fastify({
 }).withTypeProvider<TypeBoxTypeProvider>()
 
 server.setErrorHandler((error, _request, reply) => {
-  server.log.error(error)
+  logger.error(error)
   reply.status(500).send({ error: 'Something went wrong' })
 })
 
@@ -25,17 +26,22 @@ const start = async () => {
     const config = new InitDependencies(server)
     const db = config.initDatabse()
 
-    const { customerController, orderController } = config.initControllers(db)
-    const routes = new Routes(customerController, orderController)
+    const { customerController, orderController, dishController } =
+      config.initControllers(db)
+    const routes = new Routes(
+      customerController,
+      orderController,
+      dishController,
+    )
 
     routes.initRoutes(server)
 
     await server.listen({ port: 3000 })
     const address = server.server.address()
     const port = typeof address === 'object' ? address?.port : address
-    server.log.info(`Server listening on port ${port}`)
+    logger.info(`Server listening on port ${port}`)
   } catch (err) {
-    server.log.error(err.message, 'err initializing application')
+    logger.error(err.message, 'err initializing application')
     process.exit(1)
   }
 }

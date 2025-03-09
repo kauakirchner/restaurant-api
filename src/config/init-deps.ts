@@ -8,6 +8,9 @@ import Database from './knex'
 import OrderRepository from '../repositories/orders'
 import OrderService from '../services/orders'
 import OrderController from '../controllers/orders'
+import DishRepository from '../repositories/dishes'
+import DishService from '../services/dishes'
+import DishController from '../controllers/dishes'
 
 export default class InitDependencies {
   constructor(private readonly server: FastifyInstance) {}
@@ -16,6 +19,7 @@ export default class InitDependencies {
     return {
       customerController: this.initCustomerController(db),
       orderController: this.initOrderController(db),
+      dishController: this.initDishController(db),
     }
   }
 
@@ -31,6 +35,13 @@ export default class InitDependencies {
     const orderService = new OrderService(orderRepository)
     const orderController = new OrderController(orderService)
     return orderController
+  }
+
+  initDishController(db: Knex) {
+    const dishRepository = new DishRepository(db)
+    const dishService = new DishService(dishRepository)
+    const dishController = new DishController(dishService)
+    return dishController
   }
 
   public initDatabse() {
