@@ -21,7 +21,7 @@ export default class OrderRepository implements IOrderRepository {
         'c.lastname as customer_lastname',
         'p.id as order_id',
         'p.created_at',
-        this.db.raw('SUM(pp.quantity * pr.price) AS total_order'),
+        this.db.raw('SUM(pp.quantity * pr.price) AS amount'),
         this.db.raw(`
         JSON_AGG(
           JSON_BUILD_OBJECT(
@@ -52,7 +52,7 @@ export default class OrderRepository implements IOrderRepository {
         'c.lastname as customer_lastname',
         'p.id as order_id',
         'p.created_at',
-        this.db.raw('SUM(pp.quantity * pr.price) AS total_order'),
+        this.db.raw('SUM(pp.quantity * pr.price) AS amount'),
         this.db.raw(`
         JSON_AGG(
           JSON_BUILD_OBJECT(
