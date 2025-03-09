@@ -32,7 +32,7 @@ export default class OrderController implements IOrderController {
 
       return reply.status(200).send(response)
     } catch (error) {
-      request.log.error(`error on getOrders: ${error.message}`)
+      request.log.error(`error at getOrders: ${error.message}`)
       reply.status(error.statusCode).send({ error })
     }
   }
@@ -45,7 +45,7 @@ export default class OrderController implements IOrderController {
 
       reply.status(200).send(response)
     } catch (error: any) {
-      request.log.error(`error on getOrderById: ${error.message}`)
+      request.log.error(`error at getOrderById: ${error.message}`)
       reply
         .status(error.statusCode ?? 500)
         .send({ error: error ?? 'unexpected error' })
@@ -59,7 +59,7 @@ export default class OrderController implements IOrderController {
 
       return reply.status(201).send(response)
     } catch (error) {
-      request.log.error(`error on createOrder: ${error.message}`)
+      request.log.error(`error at createOrder: ${error.message}`)
       reply.status(error.statusCode ?? 500).send({ error })
     }
   }

@@ -32,7 +32,7 @@ export default class CustomerController implements ICustomerController {
 
       return reply.status(200).send(response)
     } catch (error) {
-      request.log.error(`error on getCustomers: ${error.message}`)
+      request.log.error(`error at getCustomers: ${error.message}`)
       reply.status(error.statusCode).send({ error })
     }
   }
@@ -45,7 +45,7 @@ export default class CustomerController implements ICustomerController {
 
       reply.status(200).send(response)
     } catch (error: any) {
-      request.log.error(`error on getCustomerById: ${error.message}`)
+      request.log.error(`error at getCustomerById: ${error.message}`)
       reply
         .status(error.statusCode ?? 500)
         .send({ error: error ?? 'unexpected error' })
@@ -60,7 +60,7 @@ export default class CustomerController implements ICustomerController {
 
       return reply.status(201).send(response)
     } catch (error) {
-      request.log.error(`error on createCustomer: ${error.message}`)
+      request.log.error(`error at createCustomer: ${error.message}`)
       reply.status(error.statusCode ?? 500).send({ error })
     }
   }
