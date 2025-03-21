@@ -30,7 +30,7 @@ export default class CustomerController implements ICustomerController {
     try {
       const response: Customer[] = await this.customerService.get()
 
-      return reply.status(200).send(response)
+      reply.status(200).send(response)
     } catch (error) {
       request.log.error(`error at getCustomers: ${error.message}`)
       reply.status(error.statusCode).send({ error })
@@ -58,7 +58,7 @@ export default class CustomerController implements ICustomerController {
       const response: { id: number } =
         await this.customerService.create(customer)
 
-      return reply.status(201).send(response)
+      reply.status(201).send(response)
     } catch (error) {
       request.log.error(`error at createCustomer: ${error.message}`)
       reply.status(error.statusCode ?? 500).send({ error })
