@@ -5,7 +5,7 @@ import logger from '~/config/logger'
 
 export interface IOrderRepository {
   get(): Promise<Order[]>
-  getById(id: number): Promise<Order[]>
+  getById(id: number): Promise<Order>
   create(order: Order): Promise<{ id: number }>
 }
 
@@ -43,7 +43,7 @@ export default class OrderRepository implements IOrderRepository {
     return response
   }
 
-  public async getById(id: number): Promise<Order[]> {
+  public async getById(id: number): Promise<Order> {
     logger.info('Init getOrderById repository')
     const response = await this.db('customers as c')
       .select(
@@ -70,6 +70,7 @@ export default class OrderRepository implements IOrderRepository {
       .groupBy('c.id', 'c.name', 'c.lastname', 'p.id', 'p.created_at')
       .orderBy('c.id', 'asc')
       .orderBy('p.id', 'asc')
+      .first()
 
     if (!response.length) {
       logger.error(
